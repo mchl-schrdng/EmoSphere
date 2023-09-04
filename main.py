@@ -1,9 +1,9 @@
 from utils.database import insert_word, retrieve_words
-from datetime import datetime, timedelta
 from wordcloud import WordCloud
 import streamlit as st
 import base64
 import matplotlib.pyplot as plt
+from datetime import date, timedelta
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
@@ -35,28 +35,25 @@ def main():
     if user_input:
         insert_word(user_input)
 
-    # Time Slider
-    earliest_date = datetime.strptime("2023-09-01", "%Y-%m-%d")
-    today_date = datetime.now()
-    time_range = st.slider("Select time range:", earliest_date, today_date, (earliest_date, today_date))
+    # Date Slider
+    start_date = date(2023, 9, 1)
+    end_date = date.today()
+    selected_date_range = st.date_input("Select date range:", [start_date, end_date])
 
-    # Retrieve words from the database based on the selected time range
-    words_data = retrieve_words(time_range)
+    # Retrieve words from the database based on the selected date range
+    words_data = retrieve_words(selected_date_range)
 
     # Generate and display the word cloud
     if words_data:
-        words = [item['word'] for item in words_data.data]  # Updated line
-
-        if len(words) > 0:  # Check if there are words to plot
+        words = [item['word'] for item in words_data.data]
+        if words:
             wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(words))
 
             # Display Word Cloud
             plt.figure(figsize=(10, 5))
             plt.imshow(wordcloud, interpolation='bilinear')
             plt.axis("off")
-            st.image(plt, caption="Emotional Landscape", use_column_width=True)
-        else:
-            st.warning("No words to display for the selected time range.")
+            st.pyplot(plt, caption="Emotional Landscape")
 
 if __name__ == "__main__":
     main()
