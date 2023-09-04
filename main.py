@@ -47,7 +47,8 @@ def main():
     if words_data:
         words = [item['word'] for item in words_data.data]
         if words:
-            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(words))
+            word_frequencies = Counter(words)
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_frequencies)
 
             # Display Word Cloud
             plt.figure(figsize=(10, 5))
