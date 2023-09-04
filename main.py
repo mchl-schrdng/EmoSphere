@@ -23,7 +23,7 @@ st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" 
 
 # Main function for Streamlit app
 def main():
-    st.title("EmoSphere: A Real-Time Collective Emotional Landscape")
+    st.title("EmoSphere")
 
     # Word Submission
     user_input = st.text_input("Enter a word that encapsulates your current emotional state:")
