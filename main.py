@@ -16,7 +16,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Get the Base64 string of the image
-img_base64 = get_image_base64("assets/images/logo.png")
+img_base64 = get_image_base64("images/logo.png")
 
 # Display centered logo
 st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" style="max-width:200px; height:auto;"></p>', unsafe_allow_html=True)
