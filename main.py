@@ -43,13 +43,17 @@ def main():
     # Generate and display the word cloud
     if words_data:
         words = [item['word'] for item in words_data.data]  # Updated line
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(words))
 
-        # Display Word Cloud
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis("off")
-        st.image(plt, caption="Emotional Landscape", use_column_width=True)
+        if len(words) > 0:  # Check if there are words to plot
+            wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(words))
+
+            # Display Word Cloud
+            plt.figure(figsize=(10, 5))
+            plt.imshow(wordcloud, interpolation='bilinear')
+            plt.axis("off")
+            st.image(plt, caption="Emotional Landscape", use_column_width=True)
+        else:
+            st.warning("No words to display for the selected time range.")
 
 if __name__ == "__main__":
     main()
