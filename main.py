@@ -1,6 +1,6 @@
 import streamlit as st
 import base64
-from utils.database import insert_word
+from utils.database import insert_word, retrieve_words
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
