@@ -20,5 +20,5 @@ def retrieve_words(time_range):
     query = (
         f"SELECT word FROM {table} WHERE created_at >= '{start_time}' AND created_at <= '{end_time}'"
     )
-    response = supabase_client.raw(query).execute()
+    response = supabase_client.sql(query).execute()
     return response
