@@ -42,7 +42,7 @@ def main():
 
     # Generate and display the word cloud
     if words_data:
-        words = [item['word'] for item in words_data['data']]
+        words = [item['word'] for item in words_data.data]  # Updated line
         wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(words))
 
         # Display Word Cloud
