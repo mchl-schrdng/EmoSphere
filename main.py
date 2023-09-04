@@ -21,10 +21,11 @@ img_base64 = get_image_base64("images/logo.png")
 # Display centered logo
 st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" style="max-width:200px; height:auto;"></p>', unsafe_allow_html=True)
 
+# Display centered title
+st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
+
 # Main function for Streamlit app
 def main():
-    st.title("EmoSphere")
-
     # Word Submission
     user_input = st.text_input("Enter a word that encapsulates your current emotional state:")
 
