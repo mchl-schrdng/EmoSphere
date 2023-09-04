@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import streamlit as st
 import supabase as sp
 
@@ -13,7 +14,10 @@ def insert_word(word: str):
     return response
 
 def retrieve_words(time_range):
-    """Récupère les mots de la table user_emotions en fonction d'une plage de temps sélectionnée."""
-    start_time, end_time = time_range
+    """Retrieve words from the user_emotions table based on a selected time range."""
+    current_time = datetime.now()
+    start_time = current_time - timedelta(hours=time_range[0])
+    end_time = current_time - timedelta(hours=time_range[1])
+    
     response = supabase_client.table("user_emotions").select('*').filter('created_at', 'gte', start_time).filter('created_at', 'lte', end_time).execute()
     return response
