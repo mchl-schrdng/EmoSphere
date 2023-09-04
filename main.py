@@ -1,6 +1,8 @@
+from utils.database import insert_word, retrieve_words
+from wordcloud import WordCloud
 import streamlit as st
 import base64
-from utils.database import insert_word, retrieve_words
+import matplotlib.pyplot as plt
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
@@ -37,8 +39,17 @@ def main():
 
     # Retrieve words from the database based on the selected time range
     words_data = retrieve_words(time_range)
-    
-    # TODO: Generate and display the word cloud using words_data
+
+    # Generate and display the word cloud
+    if words_data:
+        words = [item['word'] for item in words_data['data']]
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(words))
+
+        # Display Word Cloud
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis("off")
+        st.image(plt, caption="Emotional Landscape", use_column_width=True)
 
 if __name__ == "__main__":
     main()
