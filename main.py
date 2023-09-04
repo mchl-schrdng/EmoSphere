@@ -35,7 +35,9 @@ def main():
         insert_word(user_input)
 
     # Time Slider
-    time_range = st.slider("Select time range:", 0, 24, (0, 24))
+    earliest_date = datetime.strptime("2023-09-01", "%Y-%m-%d")
+    today_date = datetime.now()
+    time_range = st.slider("Select time range:", earliest_date, today_date, (earliest_date, today_date))
 
     # Retrieve words from the database based on the selected time range
     words_data = retrieve_words(time_range)
