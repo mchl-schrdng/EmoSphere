@@ -2,7 +2,7 @@
 # Streamlit theme settings
 base = "light"
 primaryColor = "#E694FF"
-backgroundColor = "#00172B"
+backgroundColor = "#0D0E24"
 secondaryBackgroundColor = "#0083B8"
 textColor = "#DCDCDC"
 font = "sans-serif"
