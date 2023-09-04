@@ -3,7 +3,7 @@ from wordcloud import WordCloud
 import streamlit as st
 import base64
 import matplotlib.pyplot as plt
-from datetime import date, timedelta
+from datetime import date
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
@@ -53,7 +53,8 @@ def main():
             plt.figure(figsize=(10, 5))
             plt.imshow(wordcloud, interpolation='bilinear')
             plt.axis("off")
-            st.pyplot(plt, caption="Emotional Landscape")
+            st.pyplot(plt)
+            st.caption("Emotional Landscape")
 
 if __name__ == "__main__":
     main()
