@@ -1,10 +1,10 @@
 import streamlit as st
-import supabase
+import supabase as sp
 
 # Initialize Supabase client
 url = st.secrets["SUPABASE_URL"]
 api_key = st.secrets["SUPABASE_API_KEY"]
-supabase_client = supabase.create_client(url, api_key)
+supabase_client = sp.create_client(url, api_key)
 
 def insert_word(word: str):
     """Insert a new word into the user_emotions table."""
