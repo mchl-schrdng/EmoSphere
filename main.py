@@ -1,5 +1,6 @@
 from utils.database import insert_word, retrieve_words
 from wordcloud import WordCloud
+from collections import Counter
 import streamlit as st
 import base64
 import matplotlib.pyplot as plt
