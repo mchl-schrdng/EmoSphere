@@ -7,18 +7,13 @@ api_key = st.secrets["SUPABASE_API_KEY"]
 supabase_client = sp.create_client(url, api_key)
 
 def insert_word(word: str):
-    """Insert a new word into the user_emotions table."""
-    table = "user_emotions"
+    """Insère un nouveau mot dans la table user_emotions."""
     data = {"word": word}
-    response = supabase_client.table(table).insert(data).execute()
+    response = supabase_client.table("user_emotions").insert([data]).execute()
     return response
 
 def retrieve_words(time_range):
-    """Retrieve words from the user_emotions table based on a selected time range."""
-    table = "user_emotions"
+    """Récupère les mots de la table user_emotions en fonction d'une plage de temps sélectionnée."""
     start_time, end_time = time_range
-    query = (
-        f"SELECT word FROM {table} WHERE created_at >= '{start_time}' AND created_at <= '{end_time}'"
-    )
-    response = supabase_client.sql(query).execute()
+    response = supabase_client.table("user_emotions").select('*').filter('created_at', 'gte', start_time).filter('created_at', 'lte', end_time).execute()
     return response
