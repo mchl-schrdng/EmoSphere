@@ -35,9 +35,10 @@ def main():
     # Time Slider
     time_range = st.slider("Select time range:", 0, 24, (0, 24))
 
-    # TODO: Retrieve words from the database based on the selected time range
-
-    # TODO: Generate and display the word cloud
+    # Retrieve words from the database based on the selected time range
+    words_data = retrieve_words(time_range)
+    
+    # TODO: Generate and display the word cloud using words_data
 
 if __name__ == "__main__":
     main()
