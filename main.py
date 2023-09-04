@@ -1,4 +1,4 @@
-vimport streamlit as st
+import streamlit as st
 from utils.database import insert_word
 
 # Display centered logo
