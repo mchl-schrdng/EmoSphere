@@ -1,9 +1,9 @@
-import streamlit as st
+vimport streamlit as st
 from utils.database import insert_word
 
 # Display centered logo
 st.write("<div style='text-align: center;'><br>", unsafe_allow_html=True)
-st.image("images/logo.png")
+st.image("images/logo.png", width=200)
 st.write("</div>", unsafe_allow_html=True)
 
 # Main function for Streamlit app
