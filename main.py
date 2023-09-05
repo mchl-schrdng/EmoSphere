@@ -29,7 +29,7 @@ st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" 
 st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 
 def main():
-    st.divider()
+    st.subheader('-', divider='rainbow')
     # Initialize session state
     if 'entered_word' not in st.session_state:
         st.session_state.entered_word = ""
