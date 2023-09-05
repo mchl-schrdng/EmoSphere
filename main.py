@@ -6,13 +6,6 @@ from datetime import datetime
 from utils.database import insert_word, retrieve_words
 from utils.sentiment_analysis import get_sentiment
 
-def load_css(filename):
-    with open(filename) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-load_css('utils/style.css')  # Update the path to your styles.css file
-
-
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
