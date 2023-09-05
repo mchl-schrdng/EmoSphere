@@ -1,6 +1,7 @@
 import streamlit as st
 import polars as pl
 import base64
+from datetime import datetime  # Import datetime
 
 from utils.database import insert_word, retrieve_words
 
@@ -39,8 +40,12 @@ def main():
     raw_data = retrieve_words()
     df = pl.DataFrame(raw_data)
 
+    # Convert string to datetime object
+    min_date = datetime.strptime("2023-09-01", "%Y-%m-%d")
+    max_date = datetime.today()
+
     # Filter by time range
-    time_range = st.slider("Select time range:", min_value=pl.lit("2023-09-01").to_datetime(), max_value=pl.lit("today").to_datetime(), value=(pl.lit("2023-09-01").to_datetime(), pl.lit("today").to_datetime()))
+    time_range = st.slider("Select time range:", min_value=min_date, max_value=max_date, value=(min_date, max_date))
     mask = (df['created_at'] >= time_range[0]) & (df['created_at'] <= time_range[1])
     filtered_df = df.filter(mask)
 
