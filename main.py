@@ -50,7 +50,6 @@ def main():
     if st.session_state.entered_word:
         insert_word(st.session_state.entered_word)
         st.session_state.entered_word = ""  # Clear the entered word
-
     # Retrieve words
     raw_data = retrieve_words()
     df = pl.DataFrame(raw_data)
@@ -60,6 +59,7 @@ def main():
     df_pd['created_at'] = pd.to_datetime(df_pd['created_at'])
 
     # Use selectbox for selecting a month and year
+    st.subheader('', divider='rainbow')
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     selected_month = st.selectbox("Select Month:", months, index=datetime.now().month - 1)
     selected_year = st.selectbox("Select Year:", list(range(2020, datetime.now().year + 1)), index=datetime.now().year - 2020)
