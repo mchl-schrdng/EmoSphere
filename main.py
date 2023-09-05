@@ -56,6 +56,7 @@ def main():
     selected_month = st.selectbox("Select Month:", months, index=datetime.now().month - 1)
     selected_year = st.selectbox("Select Year:", list(range(2020, datetime.now().year + 1)), index=datetime.now().year - 2020)
     
+    st.subheader('', divider='rainbow')
     month_number = months.index(selected_month) + 1
     mask = (df_pd['created_at'].dt.month == month_number) & (df_pd['created_at'].dt.year == selected_year)
     filtered_df_pd = df_pd[mask]
