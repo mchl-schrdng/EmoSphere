@@ -1,8 +1,7 @@
 import streamlit as st
 import polars as pl
 import base64
-from datetime import datetime  # Import datetime
-
+from datetime import datetime
 from utils.database import insert_word, retrieve_words
 
 def get_image_base64(image_path):
@@ -27,8 +26,16 @@ st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" 
 # Display centered title
 st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 
+# Initialize session state
+if 'time_range' not in st.session_state:
+    initial_min_date = datetime.strptime("2023-09-01", "%Y-%m-%d")
+    initial_max_date = datetime.today()
+    st.session_state.time_range = (initial_min_date, initial_max_date)
+
 # Main function for Streamlit app
 def main():
+    st.title("Emotional Landscape")
+
     # Insert a new word
     word = st.text_input("Enter a word:")
     if st.button("Submit"):
@@ -38,14 +45,13 @@ def main():
     raw_data = retrieve_words()
     df = pl.DataFrame(raw_data)
 
-    # Convert string to datetime object
-    min_date = datetime.strptime("2023-09-01", "%Y-%m-%d")
-    max_date = datetime.today()
+    # Use session state for slider
+    time_range = st.slider("Select time range:", min_value=datetime.strptime("2023-09-01", "%Y-%m-%d"), max_value=datetime.today(), value=st.session_state.time_range)
 
-    # Filter by time range
-    time_range = st.slider("Select time range:", min_value=min_date, max_value=max_date, value=(min_date, max_date))
-    
-    # Convert datetime to string in the format Polars can understand
+    # Update session state
+    st.session_state.time_range = time_range
+
+    # Convert datetime to string for Polars
     min_date_str = time_range[0].strftime("%Y-%m-%d")
     max_date_str = time_range[1].strftime("%Y-%m-%d")
 
@@ -55,7 +61,6 @@ def main():
 
     # Count word frequencies
     word_frequencies = filtered_df.group_by("word").agg(pl.col("word").count().alias("count"))
-
 
     # Generate word cloud (replace this with your word cloud generation code)
     st.write("Word Frequencies:", word_frequencies)
