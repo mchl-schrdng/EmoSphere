@@ -36,13 +36,7 @@ def main():
     with st.form(key='word_form'):
         # Text input inside the form
         word = st.text_input("Enter a word:")
-        
-        # Submit button for the form
-        submit_button = st.form_submit_button("Submit")
-        
-        # Check if the form was submitted
-        if submit_button:
-            insert_word(word)
+        insert_word(word)
 
     # Retrieve words
     raw_data = retrieve_words()
