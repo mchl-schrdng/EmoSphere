@@ -4,7 +4,7 @@ from datetime import datetime
 from utils.database import insert_word, retrieve_words
 import plotly.express as px
 import pandas as pd
-from sentiment_analysis import get_sentiment
+from utils.sentiment_analysis import get_sentiment
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
