@@ -1,74 +1,29 @@
 import streamlit as st
-import base64
-import matplotlib.pyplot as plt
-from datetime import date
-from wordcloud import WordCloud
-from collections import Counter
-from utils.database import insert_word, retrieve_words, get_word_frequencies
+import polars as pl
+from database import insert_word, retrieve_words
 
-def get_image_base64(image_path):
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
-
-# Style
-st.markdown("""
-    <style>
-    .centered {
-        text-align: center;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-# Get the Base64 string of the image
-img_base64 = get_image_base64("images/logo.png")
-
-# Display centered logo
-st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" style="max-width:200px; height:auto;"></p>', unsafe_allow_html=True)
-
-# Display centered title
-st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
-
-# Main function for Streamlit app
 def main():
-    # Word Submission
-    user_input = st.text_input("Enter a word that encapsulates your current emotional state:")
+    st.title("Emotional Landscape")
 
-    if user_input:
-        insert_word(user_input)
+    # Insert a new word
+    word = st.text_input("Enter a word:")
+    if st.button("Submit"):
+        insert_word(word)
 
-    # Date Slider
-    start_date = date(2023, 9, 1)
-    end_date = date.today()
-    time_range = st.date_input("Select date range:", [start_date, end_date])
+    # Retrieve words
+    raw_data = retrieve_words()
+    df = pl.DataFrame(raw_data)
 
-    # Retrieve word frequencies from the database based on the selected time range
-    word_frequencies = get_word_frequencies(time_range)
+    # Filter by time range
+    time_range = st.slider("Select time range:", min_value=pl.lit("2023-09-01").to_datetime(), max_value=pl.lit("today").to_datetime(), value=(pl.lit("2023-09-01").to_datetime(), pl.lit("today").to_datetime()))
+    mask = (df['created_at'] >= time_range[0]) & (df['created_at'] <= time_range[1])
+    filtered_df = df.filter(mask)
 
-    # Generate and display the word cloud
-    if word_frequencies:
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_frequencies)
+    # Count word frequencies
+    word_frequencies = filtered_df.groupby("word").agg(pl.col("word").count().alias("count"))
 
-        # Display Word Cloud
-        plt.figure(figsize=(10, 5))
-        plt.imshow(wordcloud, interpolation='bilinear')
-        plt.axis("off")
-        st.pyplot(plt)  # Streamlit's way to display matplotlib plots
-
-    # Clear database
-    if st.button("Clear Database"):
-        clear_database()
-
-    # Export word frequencies
-    if st.button("Export Word Frequencies"):
-        export_word_frequencies()
-
-    # Filter word frequencies by emotion
-    emotion = st.selectbox("Filter by emotion:", ["Happy", "Sad", "Angry", "Fearful", "Surprised", "Disgusted"])
-    if emotion:
-        filtered_word_frequencies = filter_word_frequencies(word_frequencies, emotion)
-        if filtered_word_frequencies:
-            st.markdown(f"Word frequencies for {emotion}:")
-            st.table(filtered_word_frequencies.most_common())
+    # Generate word cloud (replace this with your word cloud generation code)
+    st.write("Word Frequencies:", word_frequencies)
 
 if __name__ == "__main__":
     main()

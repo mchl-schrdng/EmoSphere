@@ -1,6 +1,3 @@
-import datetime
-from datetime import timedelta
-from collections import Counter
 import streamlit as st
 import supabase as sp
 
@@ -15,32 +12,10 @@ def insert_word(word: str):
     response = supabase_client.table("user_emotions").insert(data).execute()
     return response
 
-def retrieve_words(time_range):
-    # Convert datetime objects to string in the format 'YYYY-MM-DD HH:MM:SS'
-    start_time_str = time_range[0].strftime('%Y-%m-%d %H:%M:%S')
-    end_time_str = time_range[1].strftime('%Y-%m-%d %H:%M:%S')
-
-    # Execute the query
-    response = supabase_client.table("user_emotions").select('*').where('created_at', '>=', start_time_str).where('created_at', '<=', end_time_str).execute()
-
-    return response
-
-def get_word_frequencies(time_range):
-    # Convert datetime objects to string in the format 'YYYY-MM-DD HH:MM:SS'
-    start_time_str = time_range[0].strftime('%Y-%m-%d %H:%M:%S')
-    end_time_str = time_range[1].strftime('%Y-%m-%d %H:%M:%S')
-
-    # Execute the query
-    response = supabase_client.table("user_emotions").select('word').where('created_at', '>=', start_time_str).where('created_at', '<=', end_time_str).execute()
-
-    # Check if the response contains data
-    if response.status_code == 200 and response.data:
-        # Extract the 'word' field from each record in the response
-        words = [item['word'] for item in response.data]
-        
-        # Count the occurrences of each word
-        word_frequencies = Counter(words)
-
-        return word_frequencies
+def retrieve_words():
+    """Retrieve words from the user_emotions table."""
+    response = supabase_client.table("user_emotions").select('*').execute()
+    if response.status_code == 200:
+        return response.data
     else:
-        return Counter()  # return an empty Counter object
+        return []
