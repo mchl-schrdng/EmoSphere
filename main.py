@@ -86,29 +86,25 @@ def main():
     )
     sentiment_fig.update_layout(height=300)  # Adjust the height of the figure
     st.plotly_chart(sentiment_fig)
-    
-    # Create a DataFrame for sentiment distribution by month
+
+    # Sentiment distribution by month
     sentiment_by_month = []
-    for month_number, month_name in enumerate(months, start=1):
-        mask = (df_pd['created_at'].dt.month == month_number)
-        filtered_df_pd = df_pd[mask]
+    for month_name in months:
+        month_number = months.index(month_name) + 1
+        month_mask = (df_pd['created_at'].dt.month == month_number)
+        month_sentiments = df_pd[month_mask]['word'].apply(get_sentiment).value_counts().to_dict()
+        sentiment_by_month.append({'month': month_name, 'sentiment_counts': month_sentiments})
 
-        sentiment_counts = filtered_df_pd['word'].apply(get_sentiment).value_counts().reset_index()
-        sentiment_counts.columns = ['sentiment', 'count']
-
-        sentiment_by_month.append({'month': month_name, 'sentiment_counts': sentiment_counts})
-
-    # Create a Plotly pie chart for sentiment distribution by month
+    sentiment_by_month_df = pd.DataFrame(sentiment_by_month)
     sentiment_by_month_fig = px.pie(
-        names='sentiment',
-        values='count',
+        data_frame=sentiment_by_month_df.explode('sentiment_counts'),
+        names='sentiment_counts.sentiment',
+        values='sentiment_counts.count',
         title=f'Sentiment Distribution by Month',
         color_discrete_sequence=['green', 'red', 'gray'],
     )
     sentiment_by_month_fig.update_layout(height=400)  # Adjust the height of the figure
-
     st.subheader("Sentiment Distribution by Month", divider='rainbow')
-    selected_month_index = months.index(selected_month)
     st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
 
 if __name__ == "__main__":
