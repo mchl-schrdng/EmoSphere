@@ -43,25 +43,23 @@ def main():
     """)
 
     # Text input for entering a word
-    st.session_state.entered_word = st.text_input("Enter a word:", value=st.session_state.entered_word)
+    entered_word = st.text_input("Enter a word:")
+    if st.button("Analyze"):
+        if entered_word:
+            blob = TextBlob(entered_word)
+            sentiment_score = blob.sentiment.polarity
+            if sentiment_score > 0:
+                sentiment = "Positive"
+            elif sentiment_score < 0:
+                sentiment = "Negative"
+            else:
+                sentiment = "Neutral"
 
-    # Check if a word has been entered
-    if st.session_state.entered_word:
-        blob = TextBlob(st.session_state.entered_word)
-        sentiment_score = blob.sentiment.polarity
-        if sentiment_score > 0:
-            sentiment = "Positive"
-        elif sentiment_score < 0:
-            sentiment = "Negative"
-        else:
-            sentiment = "Neutral"
-        
-        insert_word(st.session_state.entered_word, sentiment)
-        st.session_state.entered_word = ""
+            insert_word(entered_word, sentiment)
 
-    # Retrieve words
+    # Retrieve words using pandas DataFrame
     raw_data = retrieve_words()
-    df = pl.DataFrame(raw_data)
+    df = pd.DataFrame(raw_data)
 
     # Use selectbox for selecting a month and year
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -71,18 +69,16 @@ def main():
     # Convert month name to month number
     month_number = months.index(selected_month) + 1
 
-    # Create a Polars mask for filtering by month and year
-    mask = (df['created_at'].year() == pl.lit(selected_year)) & (df['created_at'].month() == pl.lit(month_number))
-    filtered_df = df.filter(mask)
+    # Filter DataFrame by month and year
+    mask = (df['created_at'].dt.year == selected_year) & (df['created_at'].dt.month == month_number)
+    filtered_df = df[mask]
 
     # Count word frequencies
-    word_frequencies = filtered_df.group_by("word").agg(pl.col("word").count().alias("count"))
+    word_frequencies = filtered_df.groupby("word").size().reset_index(name="count")
 
     # Categorize words as positive or negative (modify based on your list of positive/negative words)
-    positive_words = ["happy", "joyful", "excited", "love", "glad"]
-    negative_words = ["sad", "angry", "frustrated", "hate", "upset"]
     word_frequencies['sentiment'] = word_frequencies['word'].apply(
-        lambda x: 'Positive' if x in positive_words else ('Negative' if x in negative_words else 'Neutral')
+        lambda x: analyze_sentiment(x)
     )
 
     # Create a Plotly bar chart for word frequencies
@@ -101,6 +97,16 @@ def main():
 
     # Display the emotional balance
     st.write(f"Emotional balance for {selected_month} {selected_year}: {balance}")
+
+def analyze_sentiment(word):
+    blob = TextBlob(word)
+    sentiment_score = blob.sentiment.polarity
+    if sentiment_score > 0:
+        return "Positive"
+    elif sentiment_score < 0:
+        return "Negative"
+    else:
+        return "Neutral"
 
 if __name__ == "__main__":
     main()
