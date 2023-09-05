@@ -46,12 +46,11 @@ def main():
     df = pl.DataFrame(raw_data)
 
     # Use date_input for selecting a date range
-    start_date = st.date_input("Start date:", min_value=datetime(2023, 9, 1).date())
-    end_date = st.date_input("End date:", min_value=start_date)
+    time_range = st.date_input("Select date range:", [datetime(2023, 9, 1).date(), datetime.today().date()])
 
     # Convert date to string for Polars
-    min_date_str = start_date.strftime("%Y-%m-%d")
-    max_date_str = end_date.strftime("%Y-%m-%d")
+    min_date_str = time_range[0].strftime("%Y-%m-%d")
+    max_date_str = time_range[1].strftime("%Y-%m-%d")
 
     # Create a Polars mask for filtering
     mask = (df['created_at'] >= pl.lit(min_date_str)) & (df['created_at'] <= pl.lit(max_date_str))
