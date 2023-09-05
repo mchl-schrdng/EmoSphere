@@ -54,7 +54,8 @@ def main():
     filtered_df = df.filter(mask)
 
     # Count word frequencies
-    word_frequencies = filtered_df.groupby("word").agg(pl.col("word").count().alias("count"))
+    word_frequencies = filtered_df.group_by("word").agg(pl.col("word").count().alias("count"))
+
 
     # Generate word cloud (replace this with your word cloud generation code)
     st.write("Word Frequencies:", word_frequencies)
