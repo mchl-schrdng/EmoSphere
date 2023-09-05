@@ -31,6 +31,7 @@ def main():
     1. **Enter a Word**: Type a word that represents your current emotion and hit Enter.
     2. **Select Month and Year**: Use the dropdowns to filter the data by a specific month and year.
     3. **View the Graphs**: The bar chart below will update to show the frequency of each word for the selected time period, and the pie chart will show the sentiment distribution of the entered words.
+    4. **Sentiment Distribution by Month**: The bar chart below will show the sentiment distribution for each month.
     """)
     st.subheader('', divider='rainbow')
     
