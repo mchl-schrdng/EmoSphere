@@ -98,9 +98,10 @@ def main():
 
     sentiment_by_month_df = pd.DataFrame(sentiment_by_month)
     sentiment_by_month_fig = px.bar(
-        sentiment_by_month_df,
+        sentiment_by_month_df.melt(id_vars='month', value_vars=['positive', 'negative', 'neutral']),
         x='month',
-        y=['positive', 'negative', 'neutral'],
+        y='value',
+        color='variable',
         title=f'Sentiment Distribution by Month',
         color_discrete_map={'positive': 'green', 'negative': 'red', 'neutral': 'gray'}
     )
