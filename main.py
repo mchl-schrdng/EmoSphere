@@ -1,5 +1,4 @@
 import streamlit as st
-import polars as pl
 import base64
 from datetime import datetime
 from utils.database import insert_word, retrieve_words
