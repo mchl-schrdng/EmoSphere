@@ -10,17 +10,56 @@ def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-st.markdown("""
-    <style>
-    .centered {
-        text-align: center;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+def load_lottie_animation(animation_path):
+    with open(animation_path, "r") as animation_file:
+        return animation_file.read()
+
+st.set_page_config(
+    page_title="EmoSphere",
+    page_icon="images/logo.png",
+    layout="wide"  # Adjust the layout as needed
+)
 
 img_base64 = get_image_base64("images/logo.png")
-st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" style="max-width:200px; height:auto;"></p>', unsafe_allow_html=True)
-st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
+background_svg = """
+<svg version="1.1"
+     width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg">
+    <rect width="100%" height="100%" fill="#8A2BE220" />
+    <circle cx="50%" cy="50%" r="30%" fill="#00ee6040">
+        <animate
+        attributeName="r"
+        values="30%;10%;30%"
+        dur="2s"
+        repeatCount="indefinite" />
+    </circle>
+</svg>
+"""
+background_svg_b64 = (base64.b64encode(background_svg.encode("utf-8"))).decode("utf-8")
+
+st.markdown(
+    f"""
+    <style>
+        .background-container {{
+            background-image: url(data:image/svg+xml;base64,{background_svg_b64});
+            background-position: center;
+            background-repeat: repeat;
+            background-size: cover;
+        }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    f"""
+    <div class="background-container">
+        <p class="centered"><img src="data:image/png;base64,{img_base64}" style="max-width:200px; height:auto;"></p>
+        <h1 class="centered">EmoSphere</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 def main():
     st.subheader('', divider='rainbow')
