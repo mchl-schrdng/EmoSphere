@@ -54,8 +54,8 @@ def main():
     time_range = st.date_input("Select date range:", [datetime(2023, 9, 1).date(), datetime.today().date()])
 
     # Convert date to string for Polars
-    min_date_str = time_range[0].strftime("%Y-%m-%d")
-    max_date_str = time_range[1].strftime("%Y-%m-%d")
+    min_date_str = time_range[0].strftime("%Y-%m-%d 00:00:00")
+    max_date_str = time_range[1].strftime("%Y-%m-%d 23:59:59")
 
     # Create a Polars mask for filtering
     mask = (df['created_at'] >= pl.lit(min_date_str)) & (df['created_at'] <= pl.lit(max_date_str))
