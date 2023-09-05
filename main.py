@@ -6,21 +6,6 @@ from datetime import datetime
 from utils.database import insert_word, retrieve_words
 from utils.sentiment_analysis import get_sentiment
 
-# Set the background image
-bg_img = '''
-<style>
-[data-testid="stAppViewContainer"] {
-background-image: url('https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17');
-background-size: cover;
-background-repeat: no-repeat;
-}
-</style>
-'''
-st.markdown(bg_img, unsafe_allow_html=True)
-# Display a title and some text
-st.title("Streamlit App")
-st.write("This is an example of a Streamlit app with a background image.")
-
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
