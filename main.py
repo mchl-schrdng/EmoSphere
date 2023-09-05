@@ -73,7 +73,7 @@ def main():
     word_frequencies.columns = ['word', 'count']
 
     # Use beta_columns layout for side-by-side graphs
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
 
     with col1:
         # Create a Plotly bar chart for word frequencies
