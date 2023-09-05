@@ -1,5 +1,4 @@
 import streamlit as st
-import polars as pl
 import base64
 from datetime import datetime
 from utils.database import insert_word, retrieve_words
@@ -50,12 +49,10 @@ def main():
     if st.session_state.entered_word:
         insert_word(st.session_state.entered_word)
         st.session_state.entered_word = ""  # Clear the entered word
+
     # Retrieve words
     raw_data = retrieve_words()
-    df = pl.DataFrame(raw_data)
-
-    # Convert Polars DataFrame to Pandas DataFrame
-    df_pd = df.to_pandas()
+    df_pd = pd.DataFrame(raw_data)
     df_pd['created_at'] = pd.to_datetime(df_pd['created_at'])
 
     # Use selectbox for selecting a month and year
