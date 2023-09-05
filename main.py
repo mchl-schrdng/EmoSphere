@@ -75,12 +75,15 @@ def main():
     word_frequencies = filtered_df_pd['word'].value_counts().reset_index()
     word_frequencies.columns = ['word', 'count']
 
-    # Create a Plotly bar chart
+    # Select the top 5 words by count
+    top_words = word_frequencies.nlargest(5, 'count')
+
+    # Create a Plotly bar chart for top 5 words
     fig = px.bar(
-        word_frequencies,
+        top_words,
         x='word',
         y='count',
-        title=f'Word Frequencies for {selected_month} {selected_year}',
+        title=f'Top 5 Word Frequencies for {selected_month} {selected_year}',
         color='count',  # Use 'count' column for coloring bars
         color_continuous_scale='rainbow',  # Set gradient color scale
     )
