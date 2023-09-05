@@ -1,10 +1,10 @@
-from utils.database import insert_word, retrieve_words, get_word_frequencies
-from wordcloud import WordCloud
-from collections import Counter
 import streamlit as st
 import base64
 import matplotlib.pyplot as plt
 from datetime import date
+from wordcloud import WordCloud
+from collections import Counter
+from utils.database import insert_word, retrieve_words, get_word_frequencies
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
@@ -53,6 +53,22 @@ def main():
         plt.imshow(wordcloud, interpolation='bilinear')
         plt.axis("off")
         st.pyplot(plt)  # Streamlit's way to display matplotlib plots
+
+    # Clear database
+    if st.button("Clear Database"):
+        clear_database()
+
+    # Export word frequencies
+    if st.button("Export Word Frequencies"):
+        export_word_frequencies()
+
+    # Filter word frequencies by emotion
+    emotion = st.selectbox("Filter by emotion:", ["Happy", "Sad", "Angry", "Fearful", "Surprised", "Disgusted"])
+    if emotion:
+        filtered_word_frequencies = filter_word_frequencies(word_frequencies, emotion)
+        if filtered_word_frequencies:
+            st.markdown(f"Word frequencies for {emotion}:")
+            st.table(filtered_word_frequencies.most_common())
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+import datetime
+from datetime import timedelta
 from collections import Counter
 import streamlit as st
 import supabase as sp
@@ -11,7 +12,7 @@ supabase_client = sp.create_client(url, api_key)
 def insert_word(word: str):
     """Insère un nouveau mot dans la table user_emotions."""
     data = {"word": word}
-    response = supabase_client.table("user_emotions").insert([data]).execute()
+    response = supabase_client.table("user_emotions").insert(data).execute()
     return response
 
 def retrieve_words(time_range):
@@ -20,7 +21,7 @@ def retrieve_words(time_range):
     end_time_str = time_range[1].strftime('%Y-%m-%d %H:%M:%S')
 
     # Execute the query
-    response = supabase_client.table("user_emotions").select('*').filter('created_at', 'gte', start_time_str).filter('created_at', 'lte', end_time_str).execute()
+    response = supabase_client.table("user_emotions").select('*').where('created_at', '>=', start_time_str).where('created_at', '<=', end_time_str).execute()
 
     return response
 
@@ -30,7 +31,7 @@ def get_word_frequencies(time_range):
     end_time_str = time_range[1].strftime('%Y-%m-%d %H:%M:%S')
 
     # Execute the query
-    response = supabase_client.table("user_emotions").select('word').filter('created_at', 'gte', start_time_str).filter('created_at', 'lte', end_time_str).execute()
+    response = supabase_client.table("user_emotions").select('word').where('created_at', '>=', start_time_str).where('created_at', '<=', end_time_str).execute()
 
     # Check if the response contains data
     if response.status_code == 200 and response.data:
