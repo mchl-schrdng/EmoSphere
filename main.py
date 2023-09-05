@@ -42,11 +42,11 @@ def main():
     if 'entered_word' not in st.session_state:
         st.session_state.entered_word = ""
 
-    # Text input for entering a word
-    st.session_state.entered_word = st.text_input("Enter a word:", value=st.session_state.entered_word)
+    # Text input for entering a word (limit to one word and convert to lowercase)
+    st.session_state.entered_word = st.text_input("Enter a word (one word only):", value=st.session_state.entered_word, max_chars=20).lower()
 
     # Check if a word has been entered
-    if st.session_state.entered_word:
+    if st.session_state.entered_word and " " not in st.session_state.entered_word:  # Ensure no spaces
         insert_word(st.session_state.entered_word)
         st.session_state.entered_word = ""  # Clear the entered word
 
