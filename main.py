@@ -55,7 +55,7 @@ def main():
     month_number = months.index(selected_month) + 1
 
     # Create a Polars mask for filtering by month and year
-    mask = (df['created_at'].year() == pl.lit(selected_year)) & (df['created_at'].month() == pl.lit(month_number))
+    mask = (df['created_at'].date_trunc("month") == pl.lit(f"{selected_year}-{month_number:02d}-01"))
     filtered_df = df.filter(mask)
 
     # Count word frequencies
