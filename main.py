@@ -29,8 +29,9 @@ st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" 
 st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 
 def main():
+    st.subheader('', divider='rainbow')
     st.markdown("""
-   Welcome to **EmoSphere**, an app that allows you to explore the emotional landscape based on words submitted by users.
+    Welcome to **EmoSphere**, an app that allows you to explore the emotional landscape based on words submitted by users.
     
     ### How to Use
     1. **Enter a Word**: Type a word that represents your current emotion and hit Enter.
