@@ -71,7 +71,7 @@ def main():
         color_continuous_scale='rainbow',
     )
     fig.update_traces(marker_line_width=1.5, opacity=0.7)
-    fig.update_layout(height=100)  # Adjust the height of the figure
+    
     st.plotly_chart(fig)
     
     sentiment_counts = filtered_df_pd['word'].apply(get_sentiment).value_counts().reset_index()
@@ -84,7 +84,7 @@ def main():
         title=f'Sentiment Distribution for {selected_month} {selected_year}',
         color_discrete_sequence=['green', 'red', 'gray'],
     )
-    sentiment_fig.update_layout(height=100)  # Adjust the height of the figure
+    
     st.plotly_chart(sentiment_fig)
 
 if __name__ == "__main__":
