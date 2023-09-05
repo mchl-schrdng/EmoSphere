@@ -62,30 +62,35 @@ def main():
     word_frequencies = filtered_df_pd['word'].value_counts().reset_index()
     word_frequencies.columns = ['word', 'count']
     
-    fig = px.bar(
-        word_frequencies.head(5),
-        x='word',
-        y='count',
-        title=f'Top 5 Word Frequencies for {selected_month} {selected_year}',
-        color='count',
-        color_continuous_scale='rainbow',
-    )
-    fig.update_traces(marker_line_width=1.5, opacity=0.7)
+    # Use beta_columns layout for side-by-side graphs
+    col1, col2 = st.columns(2)
+
+    with col1:
+        fig = px.bar(
+            word_frequencies.head(5),
+            x='word',
+            y='count',
+            title=f'Top 5 Word Frequencies for {selected_month} {selected_year}',
+            color='count',
+            color_continuous_scale='rainbow',
+        )
+        fig.update_traces(marker_line_width=1.5, opacity=0.7)
+        
+        st.plotly_chart(fig)
     
-    st.plotly_chart(fig)
-    
-    sentiment_counts = filtered_df_pd['word'].apply(get_sentiment).value_counts().reset_index()
-    sentiment_counts.columns = ['sentiment', 'count']
-    
-    sentiment_fig = px.pie(
-        sentiment_counts,
-        names='sentiment',
-        values='count',
-        title=f'Sentiment Distribution for {selected_month} {selected_year}',
-        color_discrete_sequence=['green', 'red', 'gray'],
-    )
-    
-    st.plotly_chart(sentiment_fig)
+    with col2:
+        sentiment_counts = filtered_df_pd['word'].apply(get_sentiment).value_counts().reset_index()
+        sentiment_counts.columns = ['sentiment', 'count']
+        
+        sentiment_fig = px.pie(
+            sentiment_counts,
+            names='sentiment',
+            values='count',
+            title=f'Sentiment Distribution for {selected_month} {selected_year}',
+            color_discrete_sequence=['green', 'red', 'gray'],
+        )
+        
+        st.plotly_chart(sentiment_fig)
 
 if __name__ == "__main__":
     main()
