@@ -46,16 +46,24 @@ def main():
     raw_data = retrieve_words()
     df = pl.DataFrame(raw_data)
 
+    # Debug: Print the entire DataFrame to see the date part
+    st.write("Debug - Entire DataFrame:")
+    st.write(df)
+
     # Use date_input for selecting a date range
     time_range = st.date_input("Select date range:", [datetime(2023, 9, 1).date(), datetime.today().date()])
 
-    # Convert date to string for Polars, extending the end date to the end of the day
-    min_date_str = time_range[0].strftime("%Y-%m-%d 00:00:00")
-    max_date_str = time_range[1].strftime("%Y-%m-%d 23:59:59")
+    # Convert date to string for Polars
+    min_date_str = time_range[0].strftime("%Y-%m-%d")
+    max_date_str = time_range[1].strftime("%Y-%m-%d")
 
     # Create a Polars mask for filtering
     mask = (df['created_at'] >= pl.lit(min_date_str)) & (df['created_at'] <= pl.lit(max_date_str))
     filtered_df = df.filter(mask)
+
+    # Debug: Print the filtered DataFrame to see the date part
+    st.write("Debug - Filtered DataFrame:")
+    st.write(filtered_df)
 
     # Count word frequencies
     word_frequencies = filtered_df.group_by("word").agg(pl.col("word").count().alias("count"))
