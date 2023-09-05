@@ -45,15 +45,13 @@ def main():
     raw_data = retrieve_words()
     df = pl.DataFrame(raw_data)
 
-    # Use session state for slider
-    time_range = st.slider("Select time range:", min_value=datetime.strptime("2023-09-01", "%Y-%m-%d"), max_value=datetime.today(), value=st.session_state.time_range)
+    # Use date_input for selecting a date range
+    start_date = st.date_input("Start date:", min_value=datetime(2023, 9, 1).date())
+    end_date = st.date_input("End date:", min_value=start_date)
 
-    # Update session state
-    st.session_state.time_range = time_range
-
-    # Convert datetime to string for Polars
-    min_date_str = time_range[0].strftime("%Y-%m-%d")
-    max_date_str = time_range[1].strftime("%Y-%m-%d")
+    # Convert date to string for Polars
+    min_date_str = start_date.strftime("%Y-%m-%d")
+    max_date_str = end_date.strftime("%Y-%m-%d")
 
     # Create a Polars mask for filtering
     mask = (df['created_at'] >= pl.lit(min_date_str)) & (df['created_at'] <= pl.lit(max_date_str))
