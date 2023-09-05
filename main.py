@@ -75,6 +75,22 @@ def main():
     # Create a Plotly bar chart
     fig = px.bar(word_frequencies, x='word', y='count', title=f'Word Frequencies for {selected_month} {selected_year}')
 
+        # Customize the appearance of the bar chart
+    fig.update_layout(
+        xaxis_title="Emotion Words",
+        yaxis_title="Frequency",
+        font=dict(family="Arial", size=12, color="black"),
+        title_font_size=20,
+        title_font_family="Arial",
+        title_x=0.5,
+        margin=dict(l=20, r=20, t=50, b=20),
+        showlegend=True,
+        legend=dict(x=1, y=1),
+        plot_bgcolor="white",
+    )
+    
+    fig.update_traces(marker_color="skyblue", marker_line_width=1.5, opacity=0.7)
+
     # Display the Plotly chart in Streamlit
     st.plotly_chart(fig)
 
