@@ -3,6 +3,8 @@ import polars as pl
 import base64
 from datetime import datetime
 from utils.database import insert_word, retrieve_words
+from wordcloud import WordCloud  # Import WordCloud
+import matplotlib.pyplot as plt  # Import matplotlib
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
@@ -59,7 +61,21 @@ def main():
     # Count word frequencies
     word_frequencies = filtered_df.group_by("word").agg(pl.col("word").count().alias("count"))
 
-    # Generate word cloud (replace this with your word cloud generation code)
+    # Convert to Pandas DataFrame for easier manipulation
+    word_frequencies_pd = word_frequencies.to_pandas().set_index('word')['count'].to_dict()
+
+    # Generate word cloud
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_frequencies_pd)
+
+    # Display the generated image using matplotlib
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+
+    # Display the word cloud in Streamlit
+    st.pyplot(plt)
+
+    # Display word frequencies as well
     st.write("Word Frequencies:", word_frequencies)
 
 if __name__ == "__main__":
