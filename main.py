@@ -6,12 +6,11 @@ from datetime import datetime
 from utils.database import insert_word, retrieve_words
 from utils.sentiment_analysis import get_sentiment
 
-# Load the custom CSS for the background animation
 def load_css(filename):
     with open(filename) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-load_css('utils/styles.css')
+load_css('utils/styles.css')  # Update the path to your styles.css file
 
 
 def get_image_base64(image_path):
