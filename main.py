@@ -79,7 +79,7 @@ def main():
         y='count',
         title=f'Word Frequencies for {selected_month} {selected_year}',
         color='count',  # Use 'count' column for coloring bars
-        color_continuous_scale='rainbow',  # Set gradient color scale
+        color_continuous_scale='spectral',  # Set gradient color scale
     )
     fig.update_traces(marker_line_width=1.5, opacity=0.7)
 
