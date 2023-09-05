@@ -1,4 +1,4 @@
-from utils.database import insert_word, retrieve_words
+from utils.database import insert_word, retrieve_words, get_word_frequencies
 from wordcloud import WordCloud
 from collections import Counter
 import streamlit as st
