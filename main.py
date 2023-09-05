@@ -106,6 +106,7 @@ def main():
         title=f'Sentiment Distribution by Month',
         color_discrete_sequence=['green', 'red', 'gray']
     )
+    sentiment_by_month_fig.update_traces(marker_line_width=1.5, opacity=0.7)
     sentiment_by_month_fig.update_layout(height=400)  # Adjust the height of the figure
     st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
     st.subheader('', divider='rainbow')
