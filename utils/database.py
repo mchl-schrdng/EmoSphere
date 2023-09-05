@@ -32,10 +32,14 @@ def get_word_frequencies(time_range):
     # Execute the query
     response = supabase_client.table("user_emotions").select('word').filter('created_at', 'gte', start_time_str).filter('created_at', 'lte', end_time_str).execute()
 
-    # Extract the 'word' field from each record in the response
-    words = [item['word'] for item in response['data']]
+    # Check if the response contains data
+    if response.status_code == 200 and response.data:
+        # Extract the 'word' field from each record in the response
+        words = [item['word'] for item in response.data]
+        
+        # Count the occurrences of each word
+        word_frequencies = Counter(words)
 
-    # Count the occurrences of each word
-    word_frequencies = Counter(words)
-
-    return word_frequencies
+        return word_frequencies
+    else:
+        return Counter()  # return an empty Counter object
