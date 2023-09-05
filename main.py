@@ -108,6 +108,7 @@ def main():
     )
     sentiment_by_month_fig.update_layout(height=400)  # Adjust the height of the figure
     st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
-
+    st.subheader('', divider='rainbow')
+    
 if __name__ == "__main__":
     main()
