@@ -98,7 +98,7 @@ def main():
 
     sentiment_by_month_df = pd.DataFrame(sentiment_by_month)
     sentiment_by_month_fig = px.bar(
-        sentiment_by_month_df.melt(id_vars='month', value_vars=['positive', 'negative', 'neutral']),
+        sentiment_by_month_df.melt(id_vars='month'),
         x='month',
         y='value',
         color='variable',
