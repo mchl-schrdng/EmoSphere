@@ -103,7 +103,7 @@ def main():
         y='value',
         color='variable',
         title=f'Sentiment Distribution by Month',
-        color_discrete_map={'positive': 'green', 'negative': 'red', 'neutral': 'gray'}
+        color_discrete_map={'positive': 'red', 'negative': 'red', 'neutral': 'gray'}
     )
     sentiment_by_month_fig.update_layout(height=400)  # Adjust the height of the figure
     st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
