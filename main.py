@@ -73,7 +73,7 @@ def main():
     word_frequencies.columns = ['word', 'count']
 
     # Create a Plotly bar chart
-       fig = px.bar(
+    fig = px.bar(
         word_frequencies,
         x='word',
         y='count',
