@@ -15,7 +15,8 @@ def insert_word(word: str):
 def retrieve_words():
     """Retrieve words from the user_emotions table."""
     response = supabase_client.table("user_emotions").select('*').execute()
-    if response.status_code == 200:
+    if response.error is None:
         return response.data
     else:
+        print(f"Error retrieving data: {response.error}")
         return []
