@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from collections import Counter
 import streamlit as st
 import supabase as sp
 
@@ -29,6 +30,12 @@ def get_word_frequencies(time_range):
     end_time_str = time_range[1].strftime('%Y-%m-%d %H:%M:%S')
 
     # Execute the query
-    response = supabase_client.table("user_emotions").select('word, count(word)').filter('created_at', 'gte', start_time_str).filter('created_at', 'lte', end_time_str).group_by('word').execute()
+    response = supabase_client.table("user_emotions").select('word').filter('created_at', 'gte', start_time_str).filter('created_at', 'lte', end_time_str).execute()
 
-    return response['data']
+    # Extract the 'word' field from each record in the response
+    words = [item['word'] for item in response['data']]
+
+    # Count the occurrences of each word
+    word_frequencies = Counter(words)
+
+    return word_frequencies
