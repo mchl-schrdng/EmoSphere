@@ -93,13 +93,13 @@ def main():
         month_number = months.index(month_name) + 1
         month_mask = (df_pd['created_at'].dt.month == month_number)
         month_sentiments = df_pd[month_mask]['word'].apply(get_sentiment).value_counts().to_dict()
-        sentiment_by_month.append({'month': month_name, 'sentiment_counts': month_sentiments})
+        sentiment_by_month.append({'month': month_name, **month_sentiments})
 
     sentiment_by_month_df = pd.DataFrame(sentiment_by_month)
-    sentiment_by_month_fig = px.pie(
-        data_frame=sentiment_by_month_df.explode('sentiment_counts'),
-        names='sentiment_counts.sentiment',
-        values='sentiment_counts.count',
+    sentiment_by_month_fig = px.bar(
+        sentiment_by_month_df,
+        x='month',
+        y=['positive', 'negative', 'neutral'],
         title=f'Sentiment Distribution by Month',
         color_discrete_sequence=['green', 'red', 'gray'],
     )
