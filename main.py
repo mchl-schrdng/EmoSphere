@@ -32,10 +32,17 @@ st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 def main():
     st.title("Emotional Landscape")
 
-    # Insert a new word
-    word = st.text_input("Enter a word:")
-    if st.button("Submit"):
-        insert_word(word)
+    # Create a form
+    with st.form(key='word_form'):
+        # Text input inside the form
+        word = st.text_input("Enter a word:")
+        
+        # Submit button for the form
+        submit_button = st.form_submit_button("Submit")
+        
+        # Check if the form was submitted
+        if submit_button:
+            insert_word(word)
 
     # Retrieve words
     raw_data = retrieve_words()
