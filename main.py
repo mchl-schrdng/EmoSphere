@@ -106,7 +106,6 @@ def main():
         color_discrete_map={'positive': 'green', 'negative': 'red', 'neutral': 'gray'}
     )
     sentiment_by_month_fig.update_layout(height=400)  # Adjust the height of the figure
-    st.subheader("Sentiment Distribution by Month", divider='rainbow')
     st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
 
 if __name__ == "__main__":
