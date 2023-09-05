@@ -113,6 +113,7 @@ def main():
     st.markdown(
         '<p style="text-align:center;">Created with ❤️ by <a href="https://www.linkedin.com/in/your-linkedin-profile/" target="_blank">Michaël</a></p>',
         unsafe_allow_html=True
-
+    )
+    
 if __name__ == "__main__":
     main()
