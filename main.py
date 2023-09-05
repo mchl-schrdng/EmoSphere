@@ -85,6 +85,7 @@ def main():
         values='count',
         title=f'Sentiment Distribution for {selected_month} {selected_year}',
         #color_discrete_sequence=['green', 'red', 'gray']
+        color_continuous_scale='rainbow'
     )
     sentiment_fig.update_layout(height=300)  # Adjust the height of the figure
     st.plotly_chart(sentiment_fig)
