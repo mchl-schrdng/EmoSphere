@@ -86,6 +86,30 @@ def main():
     )
     sentiment_fig.update_layout(height=300)  # Adjust the height of the figure
     st.plotly_chart(sentiment_fig)
+    
+    # Create a DataFrame for sentiment distribution by month
+    sentiment_by_month = []
+    for month_number, month_name in enumerate(months, start=1):
+        mask = (df_pd['created_at'].dt.month == month_number)
+        filtered_df_pd = df_pd[mask]
+
+        sentiment_counts = filtered_df_pd['word'].apply(get_sentiment).value_counts().reset_index()
+        sentiment_counts.columns = ['sentiment', 'count']
+
+        sentiment_by_month.append({'month': month_name, 'sentiment_counts': sentiment_counts})
+
+    # Create a Plotly pie chart for sentiment distribution by month
+    sentiment_by_month_fig = px.pie(
+        names='sentiment',
+        values='count',
+        title=f'Sentiment Distribution by Month',
+        color_discrete_sequence=['green', 'red', 'gray'],
+    )
+    sentiment_by_month_fig.update_layout(height=400)  # Adjust the height of the figure
+
+    st.subheader("Sentiment Distribution by Month", divider='rainbow')
+    selected_month_index = months.index(selected_month)
+    st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
 
 if __name__ == "__main__":
-    main()
+    main()"
