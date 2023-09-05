@@ -30,15 +30,12 @@ st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 
 def main():
     st.markdown("""
-    ## About this App
-    Welcome to **EmoSphere**, an app that allows you to explore the emotional landscape based on words submitted by users.
+   Welcome to **EmoSphere**, an app that allows you to explore the emotional landscape based on words submitted by users.
     
     ### How to Use
     1. **Enter a Word**: Type a word that represents your current emotion and hit Enter.
     2. **Select Month and Year**: Use the dropdowns to filter the data by a specific month and year.
     3. **View the Graph**: The bar chart below will update to show the frequency of each word for the selected time period.
-    
-    Feel free to explore and contribute to the emotional landscape!
     """)
     st.subheader('', divider='rainbow')
     # Initialize session state
