@@ -46,24 +46,17 @@ def main():
     raw_data = retrieve_words()
     df = pl.DataFrame(raw_data)
 
-    # Debug: Print the entire DataFrame to see the date part
-    st.write("Debug - Entire DataFrame:")
-    st.write(df)
+    # Use selectbox for selecting a month and year
+    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    selected_month = st.selectbox("Select Month:", months, index=datetime.now().month - 1)
+    selected_year = st.selectbox("Select Year:", list(range(2020, datetime.now().year + 1)), index=datetime.now().year - 2020)
 
-    # Use date_input for selecting a date range
-    time_range = st.date_input("Select date range:", [datetime(2023, 9, 1).date(), datetime.today().date()])
+    # Convert month name to month number
+    month_number = months.index(selected_month) + 1
 
-    # Convert date to string for Polars
-    min_date_str = time_range[0].strftime("%Y-%m-%d 00:00:00")
-    max_date_str = time_range[1].strftime("%Y-%m-%d 23:59:59")
-
-    # Create a Polars mask for filtering
-    mask = (df['created_at'] >= pl.lit(min_date_str)) & (df['created_at'] <= pl.lit(max_date_str))
+    # Create a Polars mask for filtering by month and year
+    mask = (df['created_at'].year() == pl.lit(selected_year)) & (df['created_at'].month() == pl.lit(month_number))
     filtered_df = df.filter(mask)
-
-    # Debug: Print the filtered DataFrame to see the date part
-    st.write("Debug - Filtered DataFrame:")
-    st.write(filtered_df)
 
     # Count word frequencies
     word_frequencies = filtered_df.group_by("word").agg(pl.col("word").count().alias("count"))
@@ -72,7 +65,7 @@ def main():
     word_frequencies_pd = word_frequencies.to_pandas()
 
     # Create a Plotly bar chart
-    fig = px.bar(word_frequencies_pd, x='word', y='count', title='Word Frequencies')
+    fig = px.bar(word_frequencies_pd, x='word', y='count', title=f'Word Frequencies for {selected_month} {selected_year}')
 
     # Display the Plotly chart in Streamlit
     st.plotly_chart(fig)
