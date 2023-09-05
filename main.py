@@ -28,15 +28,20 @@ st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" 
 # Display centered title
 st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 
-# Main function for Streamlit app
 def main():
     st.title("Emotional Landscape")
 
-    # Create a form
-    with st.form(key='word_form'):
-        # Text input inside the form
-        word = st.text_input("Enter a word:")
-        insert_word(word)
+    # Initialize session state
+    if 'entered_word' not in st.session_state:
+        st.session_state.entered_word = ""
+
+    # Text input for entering a word
+    st.session_state.entered_word = st.text_input("Enter a word:", value=st.session_state.entered_word)
+
+    # Check if a word has been entered
+    if st.session_state.entered_word:
+        insert_word(st.session_state.entered_word)
+        st.session_state.entered_word = ""  # Clear the entered word
 
     # Retrieve words
     raw_data = retrieve_words()
