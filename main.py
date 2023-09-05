@@ -1,6 +1,6 @@
 import streamlit as st
 import polars as pl
-from database import insert_word, retrieve_words
+from utils.database import insert_word, retrieve_words
 
 def main():
     st.title("Emotional Landscape")
