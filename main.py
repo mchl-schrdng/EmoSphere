@@ -41,22 +41,18 @@ def main():
     end_date = date.today()
     selected_date_range = st.date_input("Select date range:", [start_date, end_date])
 
-    # Retrieve words from the database based on the selected date range
-    words_data = retrieve_words(selected_date_range)
+    # Retrieve word frequencies from the database based on the selected time range
+    word_frequencies = get_word_frequencies(time_range)
 
     # Generate and display the word cloud
-    if words_data:
-        words = [item['word'] for item in words_data.data]
-        if words:
-            word_frequencies = Counter(words)
-            wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_frequencies)
+    if word_frequencies:
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(word_frequencies)
 
-            # Display Word Cloud
-            plt.figure(figsize=(10, 5))
-            plt.imshow(wordcloud, interpolation='bilinear')
-            plt.axis("off")
-            st.pyplot(plt)
-            st.caption("Emotional Landscape")
+        # Display Word Cloud
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.axis("off")
+        st.pyplot(plt)  # Streamlit's way to display matplotlib plots
 
 if __name__ == "__main__":
     main()
