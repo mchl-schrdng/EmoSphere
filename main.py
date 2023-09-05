@@ -97,17 +97,24 @@ def main():
         sentiment_by_month.append({'month': month_name, **month_sentiments})
 
     sentiment_by_month_df = pd.DataFrame(sentiment_by_month)
+
+    # Filter by year for the last chart
+    selected_year_sentiment_df = sentiment_by_month_df[sentiment_by_month_df['year'] == selected_year]
+
     sentiment_by_month_fig = px.bar(
-        sentiment_by_month_df.melt(id_vars='month'),
+        selected_year_sentiment_df.melt(id_vars='month'),
         x='month',
         y='value',
         color='variable',
-        title=f'Sentiment Distribution by Month',
+        title=f'Sentiment Distribution by Month (Year: {selected_year})',
         color_discrete_map={'positive': 'green', 'negative': 'red', 'neutral': 'gray'}
     )
     sentiment_by_month_fig.update_layout(height=400)  # Adjust the height of the figure
     st.subheader("Sentiment Distribution by Month", divider='rainbow')
-    st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
+
+    # Add a filter for selecting the year
+    selected_year = st.selectbox("Select Year for Sentiment Distribution:", list(range(2020, datetime.now().year + 1)), index=datetime.now().year - 2020)
+    main()
 
 if __name__ == "__main__":
     main()
