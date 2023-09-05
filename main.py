@@ -70,7 +70,7 @@ def main():
         y='count',
         title=f'Top 5 Word Frequencies for {selected_month} {selected_year}',
         color='count',
-        color_discrete_sequence=['green', 'red', 'gray']
+        color_continuous_scale='rainbow'
     )
     fig.update_traces(marker_line_width=1.5, opacity=0.7)
     fig.update_layout(height=300)  # Adjust the height of the figure
