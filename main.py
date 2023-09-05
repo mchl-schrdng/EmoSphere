@@ -112,4 +112,4 @@ def main():
     st.plotly_chart(sentiment_by_month_fig, use_container_width=True)
 
 if __name__ == "__main__":
-    main()"
+    main()
