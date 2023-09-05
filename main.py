@@ -86,7 +86,6 @@ def main():
         margin=dict(l=20, r=20, t=50, b=20),
         showlegend=True,
         legend=dict(x=1, y=1),
-        plot_bgcolor="white",
     )
     
     fig.update_traces(marker_color="skyblue", marker_line_width=1.5, opacity=0.7)
