@@ -74,6 +74,7 @@ def main():
 
     # Create a Plotly bar chart
     fig = px.bar(word_frequencies, x='word', y='count', title=f'Word Frequencies for {selected_month} {selected_year}')
+    fig.update_traces(marker_color="skyblue", marker_line_width=1.5, opacity=0.7)
 
     # Display the Plotly chart in Streamlit
     st.plotly_chart(fig)
