@@ -88,7 +88,7 @@ def main():
         legend=dict(x=1, y=1),
     )
     
-    fig.update_traces(marker_color="skyblue", marker_line_width=1.5, opacity=0.7)
+    fig.update_traces(marker_color="rainbow", marker_line_width=1.5, opacity=0.7)
 
     # Display the Plotly chart in Streamlit
     st.plotly_chart(fig)
