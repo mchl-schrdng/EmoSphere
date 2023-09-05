@@ -3,7 +3,8 @@ import polars as pl
 import base64
 from datetime import datetime
 from utils.database import insert_word, retrieve_words
-import plotly.express as px  # Import Plotly
+import plotly.express as px
+import pandas as pd  # Import Pandas
 
 def get_image_base64(image_path):
     with open(image_path, "rb") as img_file:
@@ -27,12 +28,6 @@ st.markdown(f'<p class="centered"><img src="data:image/png;base64,{img_base64}" 
 # Display centered title
 st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 
-# Initialize session state
-if 'time_range' not in st.session_state:
-    initial_min_date = datetime.strptime("2023-09-01", "%Y-%m-%d")
-    initial_max_date = datetime.today()
-    st.session_state.time_range = (initial_min_date, initial_max_date)
-
 # Main function for Streamlit app
 def main():
     st.title("Emotional Landscape")
@@ -46,6 +41,10 @@ def main():
     raw_data = retrieve_words()
     df = pl.DataFrame(raw_data)
 
+    # Convert Polars DataFrame to Pandas DataFrame
+    df_pd = df.to_pandas()
+    df_pd['created_at'] = pd.to_datetime(df_pd['created_at'])
+
     # Use selectbox for selecting a month and year
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     selected_month = st.selectbox("Select Month:", months, index=datetime.now().month - 1)
@@ -54,18 +53,16 @@ def main():
     # Convert month name to month number
     month_number = months.index(selected_month) + 1
 
-    # Create a Polars mask for filtering by month and year
-    mask = (df['created_at'].date_trunc("month") == pl.lit(f"{selected_year}-{month_number:02d}-01"))
-    filtered_df = df.filter(mask)
+    # Create a Pandas mask for filtering by month and year
+    mask = (df_pd['created_at'].dt.month == month_number) & (df_pd['created_at'].dt.year == selected_year)
+    filtered_df_pd = df_pd[mask]
 
     # Count word frequencies
-    word_frequencies = filtered_df.group_by("word").agg(pl.col("word").count().alias("count"))
-
-    # Convert to Pandas DataFrame for easier manipulation and plotting
-    word_frequencies_pd = word_frequencies.to_pandas()
+    word_frequencies = filtered_df_pd['word'].value_counts().reset_index()
+    word_frequencies.columns = ['word', 'count']
 
     # Create a Plotly bar chart
-    fig = px.bar(word_frequencies_pd, x='word', y='count', title=f'Word Frequencies for {selected_month} {selected_year}')
+    fig = px.bar(word_frequencies, x='word', y='count', title=f'Word Frequencies for {selected_month} {selected_year}')
 
     # Display the Plotly chart in Streamlit
     st.plotly_chart(fig)
