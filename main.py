@@ -29,8 +29,6 @@ st.markdown('<h1 class="centered">EmoSphere</h1>', unsafe_allow_html=True)
 
 # Main function for Streamlit app
 def main():
-    st.title("Emotional Landscape")
-
     # Insert a new word
     word = st.text_input("Enter a word:")
     if st.button("Submit"):
@@ -46,7 +44,13 @@ def main():
 
     # Filter by time range
     time_range = st.slider("Select time range:", min_value=min_date, max_value=max_date, value=(min_date, max_date))
-    mask = (df['created_at'] >= time_range[0]) & (df['created_at'] <= time_range[1])
+    
+    # Convert datetime to string in the format Polars can understand
+    min_date_str = time_range[0].strftime("%Y-%m-%d")
+    max_date_str = time_range[1].strftime("%Y-%m-%d")
+
+    # Create a Polars mask for filtering
+    mask = (df['created_at'] >= pl.lit(min_date_str)) & (df['created_at'] <= pl.lit(max_date_str))
     filtered_df = df.filter(mask)
 
     # Count word frequencies
