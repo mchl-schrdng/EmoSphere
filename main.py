@@ -39,7 +39,7 @@ def main():
     # Date Slider
     start_date = date(2023, 9, 1)
     end_date = date.today()
-    selected_date_range = st.date_input("Select date range:", [start_date, end_date])
+    time_range = st.date_input("Select date range:", [start_date, end_date])
 
     # Retrieve word frequencies from the database based on the selected time range
     word_frequencies = get_word_frequencies(time_range)
