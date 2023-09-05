@@ -1,4 +1,5 @@
 import streamlit as st
+import polars as pl
 import base64
 from datetime import datetime
 from utils.database import insert_word, retrieve_words
@@ -49,10 +50,12 @@ def main():
     if st.session_state.entered_word:
         insert_word(st.session_state.entered_word)
         st.session_state.entered_word = ""  # Clear the entered word
-
     # Retrieve words
     raw_data = retrieve_words()
-    df_pd = pd.DataFrame(raw_data)
+    df = pl.DataFrame(raw_data)
+
+    # Convert Polars DataFrame to Pandas DataFrame
+    df_pd = df.to_pandas()
     df_pd['created_at'] = pd.to_datetime(df_pd['created_at'])
 
     # Use selectbox for selecting a month and year
@@ -74,21 +77,6 @@ def main():
 
     # Create a Plotly bar chart
     fig = px.bar(word_frequencies, x='word', y='count', title=f'Word Frequencies for {selected_month} {selected_year}')
-
-        # Customize the appearance of the bar chart
-    fig.update_layout(
-        xaxis_title="Emotion Words",
-        yaxis_title="Frequency",
-        font=dict(family="Arial", size=12, color="black"),
-        title_font_size=20,
-        title_font_family="Arial",
-        title_x=0.5,
-        margin=dict(l=20, r=20, t=50, b=20),
-        showlegend=True,
-        legend=dict(x=1, y=1),
-    )
-    
-    fig.update_traces(marker_color="rainbow", marker_line_width=1.5, opacity=0.7)
 
     # Display the Plotly chart in Streamlit
     st.plotly_chart(fig)
